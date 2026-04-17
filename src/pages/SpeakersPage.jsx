@@ -5,39 +5,24 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 export default function SpeakersPage() {
   const { activeEvent } = useApp();
   if (!activeEvent) return null;
-
   const speakers = activeEvent.analysis.speakers;
 
   if (speakers.length === 0) {
     return (
       <div>
-        <div className="page-header">
-          <h1 className="page-title">Speaker Performance</h1>
-        </div>
-        <div className="card" style={{ textAlign: 'center', padding: 60, color: 'var(--bz-text-muted)' }}>
-          No speaker data available for this event.
-        </div>
+        <div className="page-header"><h1 className="page-title">Speaker Performance</h1></div>
+        <div className="card" style={{ textAlign: 'center', padding: 60, color: 'var(--bz-text-muted)' }}>No speaker data available.</div>
       </div>
     );
   }
 
   const sorted = [...speakers].sort((a, b) => b.impact_score - a.impact_score);
-
   const chartData = sorted.map(s => ({
-    name: s.name.length > 16 ? s.name.slice(0, 14) + '…' : s.name,
+    name: s.name.length > 16 ? s.name.slice(0, 14) + '...' : s.name,
     impact: Math.round(s.impact_score),
-    fill_rate: Math.round(s.fill_rate),
   }));
 
-  const tooltipStyle = {
-    contentStyle: {
-      background: '#FFFFFF',
-      border: '1px solid #E5E2DD',
-      borderRadius: 8,
-      fontSize: 12,
-      color: '#0F0F10',
-    },
-  };
+  const tooltipStyle = { contentStyle: { background: '#FFFFFF', border: '1px solid #E5E2DD', borderRadius: 8, fontSize: 12, color: '#0F0F10' } };
 
   return (
     <div>
@@ -68,9 +53,9 @@ export default function SpeakersPage() {
         </ResponsiveContainer>
       </div>
 
-      <div className="card">
+      <div className="card" style={{ overflowX: 'auto' }}>
         <div className="card-title">Detailed breakdown</div>
-        <table className="data-table">
+        <table className="data-table" style={{ minWidth: 700 }}>
           <thead>
             <tr>
               <th>Speaker</th>
@@ -87,24 +72,13 @@ export default function SpeakersPage() {
             {sorted.map(s => (
               <tr key={s.speaker_id}>
                 <td style={{ fontWeight: 600 }}>{s.name}</td>
-                <td style={{ color: 'var(--bz-text-secondary)' }}>{s.topic}</td>
+                <td style={{ color: 'var(--bz-text-secondary)', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.topic}</td>
                 <td>{s.sessions_count}</td>
                 <td>{s.total_attendees}/{s.total_capacity}</td>
-                <td>
-                  <span className={`badge ${s.fill_rate >= 70 ? 'badge-positive' : s.fill_rate >= 40 ? 'badge-warning' : 'badge-critical'}`}>
-                    {s.fill_rate.toFixed(0)}%
-                  </span>
-                </td>
+                <td><span className={`badge ${s.fill_rate >= 70 ? 'badge-positive' : s.fill_rate >= 40 ? 'badge-warning' : 'badge-critical'}`}>{s.fill_rate.toFixed(0)}%</span></td>
                 <td>{s.networking_triggered}</td>
                 <td>{s.avg_rating ? s.avg_rating.toFixed(1) : '—'}</td>
-                <td>
-                  <span style={{
-                    fontWeight: 700,
-                    color: s.impact_score >= 60 ? 'var(--bz-success)' : s.impact_score >= 35 ? 'var(--bz-warning)' : 'var(--bz-danger)',
-                  }}>
-                    {s.impact_score.toFixed(0)}
-                  </span>
-                </td>
+                <td><span style={{ fontWeight: 700, color: s.impact_score >= 60 ? 'var(--bz-success)' : s.impact_score >= 35 ? 'var(--bz-warning)' : 'var(--bz-danger)' }}>{s.impact_score.toFixed(0)}</span></td>
               </tr>
             ))}
           </tbody>

@@ -8,6 +8,7 @@ import SponsorsPage from './pages/SponsorsPage';
 import InsightsPage from './pages/InsightsPage';
 import ComparePage from './pages/ComparePage';
 import UpcomingPage from './pages/UpcomingPage';
+import IntelligencePage from './pages/IntelligencePage';
 
 function AppContent() {
   const { view, events, activeEventIndex, dispatch } = useApp();
@@ -17,6 +18,7 @@ function AppContent() {
       case 'upload': return <UploadPage />;
       case 'upcoming': return <UpcomingPage />;
       case 'overview': return <OverviewPage />;
+      case 'intelligence': return <IntelligencePage />;
       case 'networking': return <NetworkingPage />;
       case 'speakers': return <SpeakersPage />;
       case 'sponsors': return <SponsorsPage />;
@@ -30,14 +32,10 @@ function AppContent() {
     <div className="app-layout">
       <Sidebar />
       <main className="main-content">
-        {events.length > 1 && view !== 'compare' && view !== 'upload' && view !== 'upcoming' && (
+        {events.length > 1 && !['compare', 'upload', 'upcoming'].includes(view) && (
           <div className="event-selector">
             {events.map((ev, i) => (
-              <button
-                key={i}
-                className={`event-chip ${i === activeEventIndex ? 'active' : ''}`}
-                onClick={() => dispatch({ type: 'SET_ACTIVE_EVENT', payload: i })}
-              >
+              <button key={i} className={`event-chip ${i === activeEventIndex ? 'active' : ''}`} onClick={() => dispatch({ type: 'SET_ACTIVE_EVENT', payload: i })}>
                 {ev.parsed.event.name}
               </button>
             ))}
