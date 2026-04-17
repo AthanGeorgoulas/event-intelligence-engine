@@ -7,6 +7,7 @@ import SpeakersPage from './pages/SpeakersPage';
 import SponsorsPage from './pages/SponsorsPage';
 import InsightsPage from './pages/InsightsPage';
 import ComparePage from './pages/ComparePage';
+import UpcomingPage from './pages/UpcomingPage';
 
 function AppContent() {
   const { view, events, activeEventIndex, dispatch } = useApp();
@@ -14,6 +15,7 @@ function AppContent() {
   const renderPage = () => {
     switch (view) {
       case 'upload': return <UploadPage />;
+      case 'upcoming': return <UpcomingPage />;
       case 'overview': return <OverviewPage />;
       case 'networking': return <NetworkingPage />;
       case 'speakers': return <SpeakersPage />;
@@ -28,7 +30,7 @@ function AppContent() {
     <div className="app-layout">
       <Sidebar />
       <main className="main-content">
-        {events.length > 1 && view !== 'compare' && view !== 'upload' && (
+        {events.length > 1 && view !== 'compare' && view !== 'upload' && view !== 'upcoming' && (
           <div className="event-selector">
             {events.map((ev, i) => (
               <button

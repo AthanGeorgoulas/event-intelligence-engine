@@ -1,7 +1,7 @@
 import { useApp } from '../context/AppContext';
 import {
   LayoutDashboard, Network, Mic2, Building2, Lightbulb,
-  GitCompareArrows, Upload, X
+  GitCompareArrows, Upload, X, CalendarClock, Trash2
 } from 'lucide-react';
 
 const navItems = [
@@ -14,7 +14,7 @@ const navItems = [
 ];
 
 export default function Sidebar() {
-  const { view, events, activeEventIndex, dispatch, removeEvent } = useApp();
+  const { view, events, activeEventIndex, upcomingEvents, dispatch, removeEvent, clearAllEvents } = useApp();
 
   return (
     <div className="sidebar">
@@ -30,6 +30,22 @@ export default function Sidebar() {
         >
           <Upload />
           Upload Data
+        </button>
+
+        <button
+          className={`nav-item ${view === 'upcoming' ? 'active' : ''}`}
+          onClick={() => dispatch({ type: 'SET_VIEW', payload: 'upcoming' })}
+        >
+          <CalendarClock />
+          Upcoming
+          {upcomingEvents.length > 0 && (
+            <span style={{
+              marginLeft: 'auto', fontSize: 11, background: 'var(--bz-accent-dim)',
+              color: 'var(--bz-accent)', padding: '1px 6px', borderRadius: 8, fontWeight: 600,
+            }}>
+              {upcomingEvents.length}
+            </span>
+          )}
         </button>
 
         {events.length > 0 && (
@@ -72,8 +88,19 @@ export default function Sidebar() {
       </div>
 
       <div className="sidebar-footer">
-        <div style={{ fontSize: 11, color: 'var(--bz-text-muted)' }}>
-          {events.length} event{events.length !== 1 ? 's' : ''} loaded
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: 11, color: 'var(--bz-text-muted)' }}>
+            {events.length} event{events.length !== 1 ? 's' : ''} loaded
+          </span>
+          {events.length > 0 && (
+            <button
+              onClick={clearAllEvents}
+              title="Clear all data"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--bz-text-muted)', padding: 2 }}
+            >
+              <Trash2 size={13} />
+            </button>
+          )}
         </div>
       </div>
     </div>

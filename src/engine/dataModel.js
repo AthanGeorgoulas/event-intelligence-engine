@@ -130,6 +130,9 @@ export function parseEventData(json) {
     leads_collected: sp.leads_collected || 0,
     meetings_booked: sp.meetings_booked || 0,
     lead_user_ids: sp.lead_user_ids || [],
+    target_roles: sp.target_roles || [],
+    target_industries: sp.target_industries || [],
+    tags: sp.tags || [],
     interactions: sp.interactions || [],
   }));
 
